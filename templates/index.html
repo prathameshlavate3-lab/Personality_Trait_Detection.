@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personality AI | Trait Detection</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="page">
+
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <span>Personality AI</span>
+        </div>
+        <div class="pill">AI / ML PROTOTYPE</div>
+    </nav>
+
+    <header class="hero">
+        <span class="eyebrow">✧ Discover the Big Five</span>
+        <h1>Understand yourself,<br>
+            <span class="gradient-text">one paragraph at a time.</span>
+        </h1>
+        <p>
+            Explore a demonstration of the Big Five personality framework
+            using text processing and machine learning.
+        </p>
+    </header>
+
+    <main class="main-card">
+        <h2 class="section-title">Your personality profile</h2>
+        <p class="section-description">
+            Describe your interests, habits, work style, and how you interact
+            with people. The demo model will produce five illustrative scores.
+        </p>
+
+        <form method="POST">
+            <label for="text">Tell us about yourself</label>
+
+            <textarea
+                id="text"
+                name="text"
+                placeholder="For example: I enjoy learning new things, planning my work, meeting people, and helping my friends..."
+                required>{{ user_text }}</textarea>
+
+            <div class="form-footer">
+                <span class="helper">✧ Tip: Write a few complete sentences.</span>
+                <button type="submit">Analyze my traits &nbsp; →</button>
+            </div>
+        </form>
+
+        {% if results %}
+        <section class="results">
+            <div class="results-header">
+                <div>
+                    <h2 class="section-title">Your Big Five overview</h2>
+                    <p class="section-description">
+                        Five illustrative model outputs from your text.
+                    </p>
+                </div>
+                <span class="demo-tag">DEMO SCORES</span>
+            </div>
+
+            <div class="trait-grid">
+                {% set details = [
+                    ('O', 'Openness', '✧', 'Curiosity, imagination, and openness to experiences.', '#6558e8', '#efedff'),
+                    ('C', 'Conscientiousness', '✓', 'Planning, organization, and responsibility.', '#16866b', '#e3f7ef'),
+                    ('E', 'Extraversion', '☀', 'Social energy and engagement with others.', '#d97706', '#fff0d9'),
+                    ('A', 'Agreeableness', '♡', 'Cooperation, kindness, and consideration.', '#db4e80', '#ffebf2'),
+                    ('N', 'Neuroticism', '〰', 'The framework’s tendency toward negative emotional experiences.', '#3978d4', '#e9f2ff')
+                ] %}
+
+                {% for letter, name, symbol, description, color, light in details %}
+                    {% for trait, score in results %}
+                        {% if trait == name %}
+                        <article class="trait-card"
+                                 style="--trait-color: {{ color }}; --trait-light: {{ light }};">
+                            <div class="trait-top">
+                                <div class="trait-icon">{{ symbol }}</div>
+                                <div>
+                                    <div class="trait-name">{{ name }}</div>
+                                    <div class="trait-letter">TRAIT {{ letter }}</div>
+                                </div>
+                                <div class="trait-score">{{ score }}%</div>
+                            </div>
+
+                            <div class="track">
+                                <div class="bar"
+                                     style="--score-width: {{ score }}%;"></div>
+                            </div>
+
+                            <p class="trait-note">{{ description }}</p>
+                        </article>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+            <div class="notice">
+                <strong>Research limitation:</strong>
+                This prototype uses a very small, manually created dataset
+                with invented example scores. These results are not validated
+                psychological measurements and should not be used to make
+                decisions about a person.
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        Human Personality Trait Detection · Educational AI/ML Project
+    </footer>
+
+</div>
+</body>
+</html>
